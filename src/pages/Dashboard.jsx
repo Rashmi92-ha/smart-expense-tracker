@@ -1,11 +1,11 @@
-import { useState } from "react";
 import expensesData from "../data/expenses";
 import ExpenseSummary from "../components/dashboard/ExpenseSummary";
 import ExpensesList from "../components/expenses/ExpenseList";
 import ExpenseForm from "../components/expenses/ExpenseForm";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 function Dashboard() {
-  const [expenses, setExpenses] = useState(expensesData);
+  const [expenses, setExpenses] = useLocalStorage("expenses", expensesData);
 
   const totalExpenses = expenses.reduce(
     (sum, expense) => sum + expense.amount,
