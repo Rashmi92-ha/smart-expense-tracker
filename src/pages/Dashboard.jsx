@@ -2,6 +2,7 @@ import { useState } from "react";
 import expensesData from "../data/expenses";
 import ExpenseSummary from "../components/dashboard/ExpenseSummary";
 import ExpensesList from "../components/expenses/ExpenseList";
+import ExpenseForm from "../components/expenses/ExpenseForm";
 
 function Dashboard() {
   const [expenses, setExpenses] = useState(expensesData);
@@ -26,6 +27,10 @@ function Dashboard() {
     },
   ];
 
+  const handleAddExpense = (newExpense) => {
+    setExpenses((previousExpenses) => [newExpense, ...previousExpenses]);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <header className="mb-8">
@@ -38,8 +43,13 @@ function Dashboard() {
         </p>
       </header>
 
-      <ExpenseSummary summaryCards={summaryCards} />
-      <ExpensesList expenses={expenses} />
+      <div className="space-y-8">
+        <ExpenseForm onAddExpense={handleAddExpense} />
+
+        <ExpenseSummary summaryCards={summaryCards} />
+
+        <ExpensesList expenses={expenses} />
+      </div>
     </div>
   );
 }
