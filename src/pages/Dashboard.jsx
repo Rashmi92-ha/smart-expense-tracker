@@ -31,6 +31,12 @@ function Dashboard() {
     setExpenses((previousExpenses) => [newExpense, ...previousExpenses]);
   };
 
+  const handleDeleteExpense = (id) => {
+    setExpenses((previousExpenses) =>
+      previousExpenses.filter((expense) => expense.id !== id),
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <header className="mb-8">
@@ -48,7 +54,10 @@ function Dashboard() {
 
         <ExpenseSummary summaryCards={summaryCards} />
 
-        <ExpensesList expenses={expenses} />
+        <ExpensesList
+          expenses={expenses}
+          onDeleteExpense={handleDeleteExpense}
+        />
       </div>
     </div>
   );
