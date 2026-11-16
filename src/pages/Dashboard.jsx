@@ -3,9 +3,11 @@ import ExpenseSummary from "../components/dashboard/ExpenseSummary";
 import ExpensesList from "../components/expenses/ExpenseList";
 import ExpenseForm from "../components/expenses/ExpenseForm";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { useState } from "react";
 
 function Dashboard() {
   const [expenses, setExpenses] = useLocalStorage("expenses", expensesData);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const totalExpenses = expenses.reduce(
     (sum, expense) => sum + expense.amount,
@@ -37,6 +39,11 @@ function Dashboard() {
     );
   };
 
+  const filteredExpenses =
+    selectedCategory === "All"
+      ? expenses
+      : expenses.filter((expense) => expense.category === selectedCategory);
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <header className="mb-8">
@@ -54,8 +61,26 @@ function Dashboard() {
 
         <ExpenseSummary summaryCards={summaryCards} />
 
+        <div className="rounded-xl bg-white p-5 shadow-sm">
+          <label className="mb-2 block font-medium text-gray-700">
+            Filter by Category
+          </label>
+
+          <select
+            value={selectedCategory}
+            onChange={(event) => setSelectedCategory(event.target.value)}
+            className="w-full rounded-lg border border-gray-300 p-3 sm:w-64"
+          >
+            <option value="All">All Categories</option>
+            <option value="Food">Food</option>
+            <option value="Travel">Travel</option>
+            <option value="Bills">Bills</option>
+            <option value="Others">Others</option>
+          </select>
+        </div>
+
         <ExpensesList
-          expenses={expenses}
+          expenses={filteredExpenses}
           onDeleteExpense={handleDeleteExpense}
         />
       </div>
