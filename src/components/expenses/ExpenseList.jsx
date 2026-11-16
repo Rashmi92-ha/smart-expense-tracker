@@ -1,4 +1,4 @@
-function ExpenseList({ expenses }) {
+function ExpenseList({ expenses, onDeleteExpense }) {
   return (
     <section className="mt-8 rounded-xl bg-white p-6 shadow-sm">
       <h2 className="mb-5 text-lg font-semibold text-gray-800">
@@ -22,6 +22,13 @@ function ExpenseList({ expenses }) {
             <p className="font-semibold text-gray-800">
               ₹{expense.amount.toLocaleString("en-IN")}
             </p>
+            <button
+              type="button"
+              onClick={() => onDeleteExpense(expense.id)}
+              className="rounded-lg bg-red-100 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-200"
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
