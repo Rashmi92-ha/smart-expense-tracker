@@ -6,31 +6,37 @@ function ExpenseList({ expenses, onDeleteExpense }) {
       </h2>
 
       <div className="space-y-4">
-        {expenses.map((expense) => (
-          <div
-            key={expense.id}
-            className="flex items-center justify-between border-b border-gray-100 pb-4"
-          >
-            <div>
-              <h3 className="font-medium text-gray-800">{expense.title}</h3>
-
-              <p className="text-sm text-gray-500">
-                {expense.category} · {expense.date}
-              </p>
-            </div>
-
-            <p className="font-semibold text-gray-800">
-              ₹{expense.amount.toLocaleString("en-IN")}
-            </p>
-            <button
-              type="button"
-              onClick={() => onDeleteExpense(expense.id)}
-              className="rounded-lg bg-red-100 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-200"
+        {expenses.length === 0 ? (
+          <p className="py-6 text-center text-gray-500">
+            No expenses found in this category.
+          </p>
+        ) : (
+          expenses.map((expense) => (
+            <div
+              key={expense.id}
+              className="flex items-center justify-between border-b border-gray-100 pb-4"
             >
-              Delete
-            </button>
-          </div>
-        ))}
+              <div>
+                <h3 className="font-medium text-gray-800">{expense.title}</h3>
+                <p className="text-sm text-gray-500">
+                  {expense.category} · {expense.date}
+                </p>
+              </div>
+
+              <p className="font-semibold text-gray-800">
+                ₹{expense.amount.toLocaleString("en-IN")}
+              </p>
+
+              <button
+                type="button"
+                onClick={() => onDeleteExpense(expense.id)}
+                className="rounded-lg bg-red-100 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-200"
+              >
+                Delete
+              </button>
+            </div>
+          ))
+        )}
       </div>
     </section>
   );
