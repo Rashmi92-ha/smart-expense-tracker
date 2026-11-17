@@ -95,6 +95,17 @@ function ExpenseFilters({ filters, onChange, onClear }) {
             className={inputClass}
           />
         </Field>
+        <Field id="sortBy" label="Sort By">
+          <select
+            id="sortBy"
+            value={filters.sortBy}
+            onChange={update("sortBy")}
+            className={inputClass}
+          >
+            <option value="recent">Most recent</option>
+            <option value="highest">Highest amount</option>
+          </select>
+        </Field>
       </div>
 
       {hasInvalidDateRange(filters) && (
