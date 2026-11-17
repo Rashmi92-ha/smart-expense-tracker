@@ -2,6 +2,8 @@
 
 A React app for tracking daily expenses by category, filtering and sorting them, and visualizing spending with a chart. Data persists in the browser using localStorage.
 
+**Live demo:** <https://silver-cannoli-c16a95.netlify.app/>
+
 ## Features
 
 - **Add expenses** with amount, category, date, and note, with inline validation
