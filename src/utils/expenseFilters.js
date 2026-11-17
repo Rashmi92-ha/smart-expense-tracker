@@ -21,8 +21,7 @@ export const hasActiveFilters = (filters) =>
 export function filterExpenses(expenses, filters) {
   if (hasInvalidDateRange(filters) || hasInvalidAmountRange(filters)) return [];
 
-  const { category, startDate, endDate, minAmount, maxAmount, search } =
-    filters;
+  const { category, startDate, endDate, minAmount, maxAmount, search } = filters;
 
   const min = minAmount === "" ? -Infinity : Number(minAmount);
   const max = maxAmount === "" ? Infinity : Number(maxAmount);
