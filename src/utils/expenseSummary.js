@@ -1,5 +1,7 @@
+import { CATEGORIES } from "./constants";
+
 export function getSummaryCards(expenses) {
-  const totals = { Food: 0, Travel: 0, Bills: 0, Others: 0 };
+  const totals = Object.fromEntries(CATEGORIES.map((name) => [name, 0]));
   let total = 0;
 
   for (const { category, amount } of expenses) {
@@ -9,8 +11,15 @@ export function getSummaryCards(expenses) {
 
   return [
     { title: "Total Expenses", amount: total },
-    { title: "Food", amount: totals.Food },
-    { title: "Travel", amount: totals.Travel },
-    { title: "Bills & Others", amount: totals.Bills + totals.Others },
+    ...CATEGORIES.map((name) => ({ title: name, amount: totals[name] })),
   ];
+}
+
+export function getCategoryTotals(expenses) {
+  return CATEGORIES.map((name) => ({
+    name,
+    value: expenses
+      .filter((expense) => expense.category === name)
+      .reduce((sum, expense) => sum + expense.amount, 0),
+  })).filter((item) => item.value > 0);
 }

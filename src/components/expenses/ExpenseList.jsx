@@ -35,31 +35,40 @@ function ExpenseItem({ expense, onDelete }) {
 
 function ExpenseList({ expenses, onDeleteExpense, isFiltered = false }) {
   return (
-    <section className="rounded-xl bg-white p-6 shadow-sm">
-      <h2 className="mb-5 text-lg font-semibold text-gray-800">
-        Expenses{" "}
-        <span className="text-sm font-normal text-gray-500">
-          ({expenses.length})
-        </span>
-      </h2>
+    <section className="relative rounded-xl bg-white shadow-sm lg:min-h-[28rem]">
+      <div className="flex flex-col p-6 lg:absolute lg:inset-0">
+        <h2 className="mb-5 text-lg font-semibold text-gray-800">
+          Expenses{" "}
+          <span className="text-sm font-normal text-gray-500">
+            ({expenses.length})
+          </span>
+        </h2>
 
-      {expenses.length === 0 ? (
-        <p className="py-6 text-center text-gray-500">
-          {isFiltered
-            ? "No expenses match your filters."
-            : "No expenses yet. Add your first expense above."}
-        </p>
-      ) : (
-        <ul className="divide-y divide-gray-100">
-          {expenses.map((expense) => (
-            <ExpenseItem
-              key={expense.id}
-              expense={expense}
-              onDelete={onDeleteExpense}
-            />
-          ))}
-        </ul>
-      )}
+        {expenses.length === 0 ? (
+          <p className="py-6 text-center text-gray-500">
+            {isFiltered
+              ? "No expenses match your filters."
+              : "No expenses yet. Add your first expense above."}
+          </p>
+        ) : (
+          <div
+            role="region"
+            aria-label="Expenses list"
+            tabIndex={0}
+            className="lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2"
+          >
+            <ul className="divide-y divide-gray-100">
+              {expenses.map((expense) => (
+                <ExpenseItem
+                  key={expense.id}
+                  expense={expense}
+                  onDelete={onDeleteExpense}
+                />
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </section>
   );
 }
