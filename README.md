@@ -1,16 +1,92 @@
-# React + Vite
+# Smart Expense Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A React app for tracking daily expenses by category, filtering and sorting them, and visualizing spending with a chart. Data persists in the browser using localStorage.
 
-Currently, two official plugins are available:
+**Live demo:** <add-netlify-url-after-deploy>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![Smart Expense Tracker dashboard](./screenshot.png)
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Add expenses** with amount, category, date, and note, with inline validation
+- **Categories:** Food, Travel, Bills, Others
+- **Summary cards:** total spent overall and per category, updated as expenses change
+- **Filters:** category, date range, and amount range
+- **Search** by title, note, or category
+- **Sorting:** most recent or highest amount
+- **Chart:** donut chart of category-wise spending that follows the active filters
+- **Delete** expenses
+- **Persistence:** data is saved in localStorage and survives refreshes
+- **Sample data:** one click loads example expenses when the list is empty
+- **Responsive layout** with an accessible, scrollable expense list
 
-## Expanding the Oxlint configuration
+## Tech stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- React (Vite)
+- Tailwind CSS
+- Recharts
+- Vitest
+
+## Getting started
+
+```bash
+git clone https://github.com/Rashmi92-ha/smart-expense-tracker.git
+cd smart-expense-tracker
+npm install
+npm run dev
+```
+
+Then open the local URL printed in the terminal.
+
+## Scripts
+
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run preview` | Preview the production build locally |
+| `npm run test:run` | Run the unit tests once |
+| `npm test` | Run the tests in watch mode |
+
+## Project structure
+
+```
+src/
+├── components/
+│   ├── dashboard/   # ExpenseSummary, ExpenseFilters, CategoryChart
+│   └── expenses/    # ExpenseForm, ExpenseList
+├── hooks/           # useLocalStorage
+├── utils/           # filtering, summaries, formatting, constants (with tests)
+├── data/            # sample expenses
+└── pages/           # Dashboard
+```
+
+## Design decisions
+
+- **Filtering lives in pure functions** (`utils/expenseFilters.js`), so the logic is unit-tested without rendering the UI.
+- **All filters are one state object.** Clearing filters and detecting active filters work for any filter added later.
+- **Dates are stored as `YYYY-MM-DD` strings.** They compare and sort correctly and avoid timezone bugs. "Today" is computed from the local date, not UTC.
+- **The list and chart use the filtered expenses, while the summary cards show overall totals.**
+- **Derived data uses `useMemo`** instead of duplicated state, so the list, cards, and chart can't drift out of sync.
+- **`useLocalStorage` fails safely.** Corrupted data or blocked storage falls back to an empty list instead of crashing.
+- **Sorting works on a copy** of the filtered list, so React state is never mutated.
+
+## Testing
+
+Unit tests cover:
+
+- Filtering by category, date range, and amount range (including inclusive bounds)
+- Search, sorting, and invalid ranges
+- Entries saved without a note
+- Summary card and chart totals
+- Currency formatting
+
+```bash
+npm run test:run
+```
+
+## Possible improvements
+
+- Edit existing expenses
+- Monthly trend bar chart
+- Export to CSV
