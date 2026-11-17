@@ -2,10 +2,6 @@
 
 A React app for tracking daily expenses by category, filtering and sorting them, and visualizing spending with a chart. Data persists in the browser using localStorage.
 
-**Live demo:** <add-netlify-url-after-deploy>
-
-![Smart Expense Tracker dashboard](./screenshot.png)
-
 ## Features
 
 - **Add expenses** with amount, category, date, and note, with inline validation
