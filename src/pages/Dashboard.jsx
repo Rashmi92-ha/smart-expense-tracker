@@ -1,48 +1,28 @@
+import { useMemo, useState } from "react";
 import expensesData from "../data/expenses";
-import ExpenseSummary from "../components/dashboard/ExpenseSummary";
-import ExpensesList from "../components/expenses/ExpenseList";
-import ExpenseForm from "../components/expenses/ExpenseForm";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { useState } from "react";
+import ExpenseSummary from "../components/dashboard/ExpenseSummary";
+import ExpenseFilters from "../components/dashboard/ExpenseFilters";
+import ExpenseList from "../components/expenses/ExpenseList";
+import ExpenseForm from "../components/expenses/ExpenseForm";
+import { filterExpenses, initialFilters } from "../utils/expenseFilters";
+import { getSummaryCards } from "../utils/expenseSummary";
 
 function Dashboard() {
   const [expenses, setExpenses] = useLocalStorage("expenses", expensesData);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [filters, setFilters] = useState(initialFilters);
 
-  const totalExpenses = expenses.reduce(
-    (sum, expense) => sum + expense.amount,
-    0,
+  const summaryCards = useMemo(() => getSummaryCards(expenses), [expenses]);
+  const filteredExpenses = useMemo(
+    () => filterExpenses(expenses, filters),
+    [expenses, filters],
   );
-  const getCategoryTotal = (category) => {
-    return expenses
-      .filter((expense) => expense.category === category)
-      .reduce((sum, expense) => sum + expense.amount, 0);
-  };
 
-  const summaryCards = [
-    { title: "Total Expenses", amount: totalExpenses },
-    { title: "Food", amount: getCategoryTotal("Food") },
-    { title: "Travel", amount: getCategoryTotal("Travel") },
-    {
-      title: "Bills & Others",
-      amount: getCategoryTotal("Bills") + getCategoryTotal("Others"),
-    },
-  ];
+  const handleAddExpense = (newExpense) =>
+    setExpenses((prev) => [newExpense, ...prev]);
 
-  const handleAddExpense = (newExpense) => {
-    setExpenses((previousExpenses) => [newExpense, ...previousExpenses]);
-  };
-
-  const handleDeleteExpense = (id) => {
-    setExpenses((previousExpenses) =>
-      previousExpenses.filter((expense) => expense.id !== id),
-    );
-  };
-
-  const filteredExpenses =
-    selectedCategory === "All"
-      ? expenses
-      : expenses.filter((expense) => expense.category === selectedCategory);
+  const handleDeleteExpense = (id) =>
+    setExpenses((prev) => prev.filter((expense) => expense.id !== id));
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -50,40 +30,24 @@ function Dashboard() {
         <h1 className="text-2xl font-bold text-gray-800">
           Smart Expense Tracker
         </h1>
-
         <p className="mt-1 text-gray-500">
           Manage and track your daily expenses
         </p>
       </header>
 
-      <div className="space-y-8">
+      <main className="space-y-8">
         <ExpenseForm onAddExpense={handleAddExpense} />
-
         <ExpenseSummary summaryCards={summaryCards} />
-
-        <div className="rounded-xl bg-white p-5 shadow-sm">
-          <label className="mb-2 block font-medium text-gray-700">
-            Filter by Category
-          </label>
-
-          <select
-            value={selectedCategory}
-            onChange={(event) => setSelectedCategory(event.target.value)}
-            className="w-full rounded-lg border border-gray-300 p-3 sm:w-64"
-          >
-            <option value="All">All Categories</option>
-            <option value="Food">Food</option>
-            <option value="Travel">Travel</option>
-            <option value="Bills">Bills</option>
-            <option value="Others">Others</option>
-          </select>
-        </div>
-
-        <ExpensesList
+        <ExpenseFilters
+          filters={filters}
+          onChange={setFilters}
+          onClear={() => setFilters(initialFilters)}
+        />
+        <ExpenseList
           expenses={filteredExpenses}
           onDeleteExpense={handleDeleteExpense}
         />
-      </div>
+      </main>
     </div>
   );
 }

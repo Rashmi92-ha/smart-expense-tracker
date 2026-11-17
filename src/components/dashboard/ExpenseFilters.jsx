@@ -1,0 +1,80 @@
+import { CATEGORIES } from "../../utils/constants";
+import { hasInvalidDateRange } from "../../utils/expenseFilters";
+
+const inputClass = "w-full rounded-lg border border-gray-300 p-3";
+
+function Field({ id, label, children }) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-2 block text-sm text-gray-600">
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function ExpenseFilters({ filters, onChange, onClear }) {
+  const update = (key) => (event) =>
+    onChange({ ...filters, [key]: event.target.value });
+
+  return (
+    <section className="rounded-xl bg-white p-5 shadow-sm">
+      <h2 className="mb-4 font-medium text-gray-700">Filters</h2>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <Field id="category" label="Category">
+          <select
+            id="category"
+            value={filters.category}
+            onChange={update("category")}
+            className={inputClass}
+          >
+            <option value="All">All Categories</option>
+            {CATEGORIES.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </Field>
+
+        <Field id="startDate" label="Start Date">
+          <input
+            id="startDate"
+            type="date"
+            value={filters.startDate}
+            onChange={update("startDate")}
+            className={inputClass}
+          />
+        </Field>
+
+        <Field id="endDate" label="End Date">
+          <input
+            id="endDate"
+            type="date"
+            value={filters.endDate}
+            onChange={update("endDate")}
+            className={inputClass}
+          />
+        </Field>
+      </div>
+
+      {hasInvalidDateRange(filters) && (
+        <p className="mt-3 text-sm text-red-600" role="alert">
+          End date cannot be earlier than start date.
+        </p>
+      )}
+
+      <button
+        type="button"
+        onClick={onClear}
+        className="mt-4 rounded-lg bg-gray-800 px-4 py-2 text-white hover:bg-gray-700"
+      >
+        Clear Filters
+      </button>
+    </section>
+  );
+}
+
+export default ExpenseFilters;
