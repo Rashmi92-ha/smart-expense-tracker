@@ -1,5 +1,5 @@
-import { formatCurrency } from "../../utils/format";
 import { formatDate } from "../../utils/date";
+import { formatCurrency } from "../../utils/format";
 
 function ExpenseItem({ expense, onDelete }) {
   return (
