@@ -1,5 +1,8 @@
 import { CATEGORIES } from "../../utils/constants";
-import { hasInvalidDateRange } from "../../utils/expenseFilters";
+import {
+  hasInvalidDateRange,
+  hasInvalidAmountRange,
+} from "../../utils/expenseFilters";
 
 const inputClass = "w-full rounded-lg border border-gray-300 p-3";
 
@@ -22,7 +25,7 @@ function ExpenseFilters({ filters, onChange, onClear }) {
     <section className="rounded-xl bg-white p-5 shadow-sm">
       <h2 className="mb-4 font-medium text-gray-700">Filters</h2>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Field id="category" label="Category">
           <select
             id="category"
@@ -58,11 +61,41 @@ function ExpenseFilters({ filters, onChange, onClear }) {
             className={inputClass}
           />
         </Field>
+
+        <Field id="minAmount" label="Min Amount (₹)">
+          <input
+            id="minAmount"
+            type="number"
+            min="0"
+            placeholder="0"
+            value={filters.minAmount}
+            onChange={update("minAmount")}
+            className={inputClass}
+          />
+        </Field>
+
+        <Field id="maxAmount" label="Max Amount (₹)">
+          <input
+            id="maxAmount"
+            type="number"
+            min="0"
+            placeholder="No limit"
+            value={filters.maxAmount}
+            onChange={update("maxAmount")}
+            className={inputClass}
+          />
+        </Field>
       </div>
 
       {hasInvalidDateRange(filters) && (
         <p className="mt-3 text-sm text-red-600" role="alert">
           End date cannot be earlier than start date.
+        </p>
+      )}
+
+      {hasInvalidAmountRange(filters) && (
+        <p className="mt-3 text-sm text-red-600" role="alert">
+          Min amount cannot be greater than max amount.
         </p>
       )}
 
