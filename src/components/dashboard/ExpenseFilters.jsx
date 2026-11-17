@@ -26,6 +26,16 @@ function ExpenseFilters({ filters, onChange, onClear }) {
       <h2 className="mb-4 font-medium text-gray-700">Filters</h2>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Field id="search" label="Search">
+          <input
+            id="search"
+            type="search"
+            placeholder="Note or category"
+            value={filters.search}
+            onChange={update("search")}
+            className={inputClass}
+          />
+        </Field>
         <Field id="category" label="Category">
           <select
             id="category"
